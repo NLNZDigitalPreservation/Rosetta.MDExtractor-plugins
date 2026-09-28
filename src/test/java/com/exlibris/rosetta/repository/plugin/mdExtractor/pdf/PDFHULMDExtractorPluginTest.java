@@ -1,13 +1,21 @@
 package com.exlibris.rosetta.repository.plugin.mdExtractor.pdf;
 
 import com.exlibris.rosetta.repository.plugin.mdExtractor.base.AbstractNLNZMDExtractorPluginTest;
+
+import edu.harvard.hul.ois.jhove.NisoImageMetadata;
+import edu.harvard.hul.ois.jhove.Property;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.List;
+
+import static org.junit.Assume.assumeTrue;
 
 public class PDFHULMDExtractorPluginTest extends AbstractNLNZMDExtractorPluginTest {
     private static PDFHULMDExtractorPlugin testInstance = new PDFHULMDExtractorPlugin();
@@ -28,7 +36,8 @@ public class PDFHULMDExtractorPluginTest extends AbstractNLNZMDExtractorPluginTe
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(Objects.requireNonNull(classLoader.getResource("images.pdf")).getFile());
         testInstance.extract(file.getAbsolutePath());
-//        String a = testInstance.getAttributeByName("PDFMetadata.Pages.Page.Sequence");
+        // String a =
+        // testInstance.getAttributeByName("PDFMetadata.Pages.Page.Sequence");
         String a = testInstance.getAttributeByName("PDFMetadata.Images.Image.NisoImageMetadata.CompressionScheme");
         assert a != null;
         assert a.equals("6");
@@ -42,7 +51,8 @@ public class PDFHULMDExtractorPluginTest extends AbstractNLNZMDExtractorPluginTe
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(Objects.requireNonNull(classLoader.getResource("sample.pdf")).getFile());
         testInstance.extract(file.getAbsolutePath());
-//        String a = testInstance.getAttributeByName("PDFMetadata.Pages.Page.Sequence");
+        // String a =
+        // testInstance.getAttributeByName("PDFMetadata.Pages.Page.Sequence");
         LinkedList a = (LinkedList) testInstance.getOriginalAttributeByName("PDFMetadata.Pages");
         assert a != null;
         assert a.size() == 2;
@@ -87,9 +97,36 @@ public class PDFHULMDExtractorPluginTest extends AbstractNLNZMDExtractorPluginTe
         File file = new File(Objects.requireNonNull(classLoader.getResource("R1603377.pdf")).getFile());
         testInstance.extract(file.getAbsolutePath());
 
-        //PDFMetadata.Objects
+        // PDFMetadata.Objects
         Object b = testInstance.getAttributeByName("PDFMetadata.PDFMetadata.Objects");
         assert b != null;
         assert b.toString().equals("-1");
+    }
+
+    @Test
+    public void testExtractImages() throws Exception {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource("R1603377.pdf");
+        assumeTrue("Skipping testExtractImages because fixture file is missing: R1603377.pdf", resource != null);
+
+        File file = new File(resource.toURI());
+        testInstance.extract(file.getAbsolutePath());
+
+        // PDFMetadata.Images
+        List<Property> b = (List<Property>) testInstance.getOriginalAttributeByName("PDFMetadata.PDFMetadata.Images");
+        assert b != null;
+        for (Property property : b) {
+            assert property.getName().equals("Image");
+            System.out.println(property.getName() + " : " + property.getValue());
+            List<Property> imageProperties = (List<Property>) property.getValue();
+            for (Property imageProperty : imageProperties) {
+                System.out.println(imageProperty.getName() + " : " + imageProperty.getValue());
+                if (imageProperty.getName().equals("NisoImageMetadata")) {
+                    NisoImageMetadata nisoImageProperties = (NisoImageMetadata) imageProperty.getValue();
+                    System.out.println(
+                            "NisoImageMetadata.MimeType : " + nisoImageProperties.getMimeType());
+                }
+            }
+        }
     }
 }
