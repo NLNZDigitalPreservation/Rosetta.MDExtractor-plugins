@@ -1,0 +1,70 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Gradle test (debug-jvm)",
+      "type": "shell",
+      "command": "./gradlew",
+      "args": [
+        "test",
+        "--debug-jvm"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "pattern": [
+            {
+              "regexp": "^(.*)$",
+              "message": 1
+            }
+          ],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".",
+            "endsPattern": "Listening for transport dt_socket at address: 5005"
+          }
+        }
+      ]
+    },
+    {
+      "label": "Gradle single test (debug-jvm)",
+      "type": "shell",
+      "command": "./gradlew",
+      "args": [
+        "test",
+        "--debug-jvm",
+        "--tests",
+        "${input:testFilter}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "pattern": [
+            {
+              "regexp": "^(.*)$",
+              "message": 1
+            }
+          ],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".",
+            "endsPattern": "Listening for transport dt_socket at address: 5005"
+          }
+        }
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "testFilter",
+      "type": "promptString",
+      "description": "JUnit/Gradle test filter, for example: com.exlibris...PDFHULMDExtractorPluginTest or ...PDFHULMDExtractorPluginTest.testExtract"
+    }
+  ]
+}

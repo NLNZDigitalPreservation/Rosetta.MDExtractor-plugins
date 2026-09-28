@@ -1,0 +1,28 @@
+{
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.import.gradle.enabled": true,
+  "java.import.gradle.wrapper.enabled": true,
+  "java.import.gradle.offline.enabled": false,
+  "java.import.exclusions": [
+    "**/build/**",
+    "**/target/**",
+    "**/.gradle/**"
+  ],
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-1.8",
+      "path": "/usr/lib/jvm/java-8-openjdk-amd64",
+      "default": true
+    }
+  ],
+  "java.test.defaultConfig": "Java 8 Workspace",
+  "java.test.config": [
+    {
+      "name": "Java 8 Workspace",
+      "workingDirectory": "${workspaceFolder}",
+      "vmArgs": [
+        "-Ddigitool.home=/tmp"
+      ]
+    }
+  ]
+}

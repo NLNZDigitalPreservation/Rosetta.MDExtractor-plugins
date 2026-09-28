@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach: Gradle Test JVM (All Tests)",
+      "type": "java",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005,
+      "preLaunchTask": "Gradle test (debug-jvm)"
+    },
+    {
+      "name": "Attach: Gradle Test JVM (Single Test)",
+      "type": "java",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005,
+      "preLaunchTask": "Gradle single test (debug-jvm)"
+    }
+  ]
+}
